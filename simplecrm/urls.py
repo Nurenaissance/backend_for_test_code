@@ -32,7 +32,8 @@ from simplecrm import get_column_name as getxcol
 from simplecrm import get_user as getuser
 from tenant import views as tenview
 from campaign import views as campview
-
+from simplecrm.recent_request import recent_request
+from interaction.active_account import most_active_entities
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
@@ -40,8 +41,10 @@ urlpatterns = [
     path('login/', Reg.LoginView.as_view(), name='login'), 
     path(r'accounts/', aviews.AccountListCreateAPIView.as_view(), name='account-list'),
     path('accounts/<int:pk>/', aviews.AccountDetailAPIView.as_view(), name='account-detail'),
+    path("active_accounts/",most_active_entities, name="most-active-entites"),
     path(r'leads/', lviews.LeadListCreateAPIView.as_view(), name='lead-list'),
     path('leads/<int:pk>/',lviews.LeadDetailAPIView.as_view(), name='lead-detail'),
+    path('request/<str:module_name>/',recent_request, name='recent_request'),
     path(r'opportunities/', oviews.OpportunityListAPIView.as_view(), name='opportunity-list'),
     path('contacts/', cviews.ContactListCreateAPIView.as_view(), name='contact-list-create'),
     path('contacts/<int:pk>/', cviews.ContactDetailAPIView.as_view(), name='contact-detail'),
