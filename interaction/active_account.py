@@ -9,7 +9,6 @@ from django.http import JsonResponse
 from interaction.models import Interaction
 
 
-
 LEAD_STATUS = [
     ('assigned', 'Assigned'),
     ('in process', 'In Process'),

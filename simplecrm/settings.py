@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'simplecrm',
     'tenant',
     'campaign',
+    'node_temps',
 ]
 
 MIDDLEWARE = [

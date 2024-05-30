@@ -34,6 +34,7 @@ from tenant import views as tenview
 from campaign import views as campview
 from simplecrm.recent_request import recent_request
 from interaction.active_account import most_active_entities
+from node_temps import views as nviews
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
@@ -62,5 +63,6 @@ urlpatterns = [
     path('logout/', Reg.LogoutView.as_view(), name='logout'),
     path('campaign/', campview.CampaignViewSet.as_view(), name='campaigns'),
     path('campaign/<int:pk>', campview.CampaignDetailAPIView.as_view(), name='campaigns'),
-
+    path(r'node-templates/', nviews.NodeTemplateListCreateAPIView.as_view(), name='node-template-list-create'),
+    path('node-templates/<int:pk>/', nviews.NodeTemplateDetailAPIView.as_view(), name='node-template-detail'),
 ]
