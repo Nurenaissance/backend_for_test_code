@@ -23,6 +23,7 @@ class OpportunityListAPIView(generics.ListCreateAPIView):
     queryset = Opportunity.objects.all()
     serializer_class = OpportunitySerializer
     #permission_classes = (IsAdminUser,)
+<<<<<<< HEAD
 
 # views.py
 
@@ -155,3 +156,10 @@ def get_interaction_total():
     total_interaction = Interaction.objects.all()
     report_data = {'total_interaction':total_interaction.count(), 'interaction': list(total_interaction.values('id','notes','entity_type'))}
     return report_data
+=======
+class OpportunityDetailAPIView(generics.RetrieveUpdateAPIView):
+    queryset = Opportunity.objects.all()
+    serializer_class = OpportunitySerializer
+    # Uncomment the line below to restrict access to admin users only
+    # permission_classes = (IsAdminUser,)
+>>>>>>> ebcf565080fc7cd921aa134b69187bf116a17d51

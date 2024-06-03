@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from datetime import datetime
 from .models import Interaction
-
+from tenant.models import Tenant
 from django.contrib.contenttypes.models import ContentType
 from .serializers import InteractionSerializer
 
@@ -46,11 +46,12 @@ class InteractionListAPIView(APIView):
             entity_type = request.data.get('entity_type')
             entity_id = request.data.get('entity_id')
             interaction_type = request.data.get('interaction_type')
+            tenant_id = request.data.get('tenant_id')
             notes = request.data.get('notes')
 
             # Get the ContentType object for the specified entity type (case insensitive)
             content_type = ContentType.objects.get(model__iexact=entity_type)
-
+            tenant = get_object_or_404(Tenant, id=tenant_id)
             # Retrieve the entity instance based on entity_id
             entity_instance = content_type.get_object_for_this_type(id=entity_id)
 
@@ -60,7 +61,8 @@ class InteractionListAPIView(APIView):
                 entity_id=entity_instance.id,
                 interaction_type=interaction_type,
                 interaction_datetime=datetime.now(),
-                notes=notes
+                notes=notes,
+                tenant=tenant
             )
 
             serializer = self.serializer_class(interaction)
@@ -69,6 +71,7 @@ class InteractionListAPIView(APIView):
             return Response({'error': f"ContentType matching query does not exist for entity type: {entity_type}"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': f'An error occurred while processing the request: {e}'}, status=status.HTTP_400_BAD_REQUEST)
+<<<<<<< HEAD
         
 
 
@@ -113,3 +116,13 @@ def extract_cltv(request, entity_type_id):
     except Exception as e:
         # Handle exceptions
         return JsonResponse({'error': str(e)}, status=500)
+=======
+
+class InteractionDetailAPIView(APIView):
+    serializer_class = InteractionSerializer
+
+    def get(self, request, pk, *args, **kwargs):
+        interaction = get_object_or_404(Interaction, pk=pk)
+        serializer = self.serializer_class(interaction)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+>>>>>>> ebcf565080fc7cd921aa134b69187bf116a17d51

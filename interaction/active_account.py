@@ -7,7 +7,14 @@ from leads.models import Lead
 from django.db.models import Count, Sum, OuterRef, Subquery, Value
 from django.http import JsonResponse
 from interaction.models import Interaction
+<<<<<<< HEAD
 
+=======
+from accounts import serializers as accser
+from contacts import serializers as conser
+AccountSerializer=accser.AccountSerializer
+ContactSerializer=conser.ContactSerializer
+>>>>>>> ebcf565080fc7cd921aa134b69187bf116a17d51
 
 LEAD_STATUS = [
     ('assigned', 'Assigned'),
@@ -17,8 +24,14 @@ LEAD_STATUS = [
     ('dead', 'Dead')
 ]
 
+<<<<<<< HEAD
 def most_active_entities(request):
     try:
+=======
+def get_most_active_accounts(request):
+    try:
+        # Annotate accounts with interaction counts
+>>>>>>> ebcf565080fc7cd921aa134b69187bf116a17d51
         accounts = Account.objects.annotate(
             interaction_count=Coalesce(
                 Subquery(
@@ -31,8 +44,33 @@ def most_active_entities(request):
                 Value(0),
                 output_field=models.IntegerField()
             )
+<<<<<<< HEAD
         )
 
+=======
+        ).order_by('-interaction_count')  # Order by interaction count in descending order
+
+        # Serialize the account data
+        serializer = AccountSerializer(accounts, many=True)
+
+        # Prepare response data with interaction count added to each account
+        response_data = []
+        for account, serialized_data in zip(accounts, serializer.data):
+            serialized_data['interaction_count'] = account.interaction_count
+            response_data.append(serialized_data)
+
+        return JsonResponse({
+            'most_active_accounts': response_data
+        }, safe=False)
+    except Exception as e:
+        print("Error:", e)
+        return JsonResponse({'message': 'An error occurred.'}, status=500)
+    
+   
+def get_most_active_contacts(request):
+    try:
+        # Annotate contacts with interaction counts
+>>>>>>> ebcf565080fc7cd921aa134b69187bf116a17d51
         contacts = Contact.objects.annotate(
             interaction_count=Coalesce(
                 Subquery(
@@ -45,6 +83,7 @@ def most_active_entities(request):
                 Value(0),
                 output_field=models.IntegerField()
             )
+<<<<<<< HEAD
         )
 
         most_active_accounts = [{
@@ -80,6 +119,28 @@ def most_active_entities(request):
              }
         } for contact in contacts]
 
+=======
+        ).order_by('-interaction_count')  # Order by interaction count in descending order
+
+        # Serialize the contact data
+        serializer = ContactSerializer(contacts, many=True)
+
+        # Prepare response data with interaction count added to each contact
+        response_data = []
+        for contact, serialized_data in zip(contacts, serializer.data):
+            serialized_data['interaction_count'] = contact.interaction_count
+            response_data.append(serialized_data)
+
+        return JsonResponse({
+            'most_active_contacts': response_data
+        }, safe=False)
+    except Exception as e:
+        print("Error:", e)
+        return JsonResponse({'message': 'An error occurred.'}, status=500)
+
+def get_lead_summation(request):
+    try:
+>>>>>>> ebcf565080fc7cd921aa134b69187bf116a17d51
         stages = Lead.objects.values('status').annotate(
             total_amount=Sum('opportunity_amount'),
             lead_count=Count('id')
@@ -101,11 +162,17 @@ def most_active_entities(request):
             for status, data in status_dict.items()
         ]
         
+<<<<<<< HEAD
         total_amount = Lead.objects.aggregate(total_amount=Sum('account_id'))['total_amount']
 
         return JsonResponse({
             'most_active_accounts': most_active_accounts,
             'most_active_contacts': most_active_contacts,
+=======
+        total_amount = Lead.objects.aggregate(total_amount=Sum('opportunity_amount'))['total_amount']
+
+        return JsonResponse({
+>>>>>>> ebcf565080fc7cd921aa134b69187bf116a17d51
             'lead_sum': {
                 'stages': stages_with_all_statuses,
                 'total_amount': total_amount,
