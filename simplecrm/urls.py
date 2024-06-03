@@ -35,6 +35,9 @@ from campaign import views as campview
 from simplecrm.recent_request import recent_request
 from interaction.active_account import most_active_entities
 from node_temps import views as nviews
+from interaction.views import extract_cltv
+from opportunities.views import get_report_by_id
+
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
@@ -65,4 +68,11 @@ urlpatterns = [
     path('campaign/<int:pk>', campview.CampaignDetailAPIView.as_view(), name='campaigns'),
     path(r'node-templates/', nviews.NodeTemplateListCreateAPIView.as_view(), name='node-template-list-create'),
     path('node-templates/<int:pk>/', nviews.NodeTemplateDetailAPIView.as_view(), name='node-template-detail'),
+    path('extract_cltv/<int:entity_type_id>/', extract_cltv, name='extract_cltv'),
+    # path ('report/<int:report_id/',get_report_by_id, name='get_report_by_id'),
+    path ('r/<str:report_id>/', get_report_by_id, name='get_report_by_id'),
+    
+
+   
+
 ]

@@ -49,12 +49,35 @@ def most_active_entities(request):
 
         most_active_accounts = [{
             'entity_id': account.id,
-            'interaction_count': account.interaction_count
+            'name': account.Name,
+            'interaction_count': account.interaction_count,
+            'details':{
+                'phone': account.phone,
+                'email': account.email,
+                'Email':account.email,  
+                'Created On':account.createdOn,
+                'Industry':account.industry, 
+                'Website':account.website,
+                #   description 
+                # assigned_to
+                # createdBy 
+                # isActive  
+                # company
+
+            }
         } for account in accounts]
 
         most_active_contacts = [{
             'entity_id': contact.id,
-            'interaction_count': contact.interaction_count
+            'name':contact.first_name,
+            'interaction_count': contact.interaction_count,
+             'details': {
+                'acc':contact.account,        
+                'email': contact.email,
+                'phone': contact.phone,
+                'address':contact.address, 
+                'Created On':contact.createdOn,                 
+             }
         } for contact in contacts]
 
         stages = Lead.objects.values('status').annotate(
