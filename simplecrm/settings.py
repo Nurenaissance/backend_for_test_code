@@ -50,18 +50,12 @@ INSTALLED_APPS = [
     'channels',
     'reminder',
     'simplecrm',
-<<<<<<< HEAD
     'tenant',
     'campaign',
     'node_temps',
-    
-=======
-     'tenant',
-     'campaign',
-     'vendors',
-     'product',
-     'documents',
->>>>>>> ebcf565080fc7cd921aa134b69187bf116a17d51
+    'vendors',
+    'product',
+    'documents',
 ]
 
 MIDDLEWARE = [

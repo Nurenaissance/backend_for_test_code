@@ -8,7 +8,7 @@ from .utils import calculate_rfm_metrics
 
 
 from datetime import datetime, timedelta,date
-from django.db.models import Count
+from django.db.models import Count,Sum
 from .models import Contact , Account
 from leads.models import Lead
 from calls.models import calls
@@ -16,6 +16,7 @@ from interaction.models import Interaction
 from meetings.models import meetings
 from campaign.models import Campaign
 from django.contrib.auth import get_user_model
+from vendors.models import Vendors
 
 # Create your views here.
 
@@ -23,9 +24,13 @@ class OpportunityListAPIView(generics.ListCreateAPIView):
     queryset = Opportunity.objects.all()
     serializer_class = OpportunitySerializer
     #permission_classes = (IsAdminUser,)
-<<<<<<< HEAD
 
 # views.py
+class OpportunityDetailAPIView(generics.RetrieveUpdateAPIView):
+    queryset = Opportunity.objects.all()
+    serializer_class = OpportunitySerializer
+    # Uncomment the line below to restrict access to admin users only
+    # permission_classes = (IsAdminUser,)
 
 
 def rfm_analysis(request):
@@ -58,7 +63,13 @@ def get_report_by_id(request, report_id):
         'today_lead':get_leads_by_today,
         'leads_account_name':get_leads_by_account_name,
         'campaign_status':get_campaign_status,
+        'today_sales':get_todays_sales,
+        'lead_by_source':get_sales_by_lead_source,
+        'sales_this_month':get_sales_this_month,
+        # 'deal_lost':deal_lost,
+        'vendor_owner':get_vendors_owner
   
+
     }
     report_function = report_id_to_function.get(report_id)
 
@@ -90,7 +101,8 @@ def get_new_leads_this_month():
 
 def get_converted_leads():
     converted_leads = Lead.objects.filter(status='converted')
-    return list(converted_leads.values('id', 'first_name', 'last_name','phone','status','account'))
+    report_data = {'total_converted leads':converted_leads.count(),'converted_leads':list(converted_leads.values('id', 'first_name', 'last_name','phone','status','account'))}
+    return report_data
 
 def get_leads_by_source():
     lead_source = Lead.objects.all()
@@ -136,9 +148,8 @@ def get_contact_address():
 def get_calls_and_emails():
     call = calls.objects.all()
     email = Contact.objects.all()
-
-    call_data = list(call.values('id','call_to'))
-    email_data = list(email.values('id','first_name'))
+    call_data = list(call.values())
+    email_data = list(email.values())
     report_data = {'total calls': call.count(), 'calls':call_data, 'total emails': email.count(), 'eamils':email_data}
     return report_data
 
@@ -156,10 +167,46 @@ def get_interaction_total():
     total_interaction = Interaction.objects.all()
     report_data = {'total_interaction':total_interaction.count(), 'interaction': list(total_interaction.values('id','notes','entity_type'))}
     return report_data
-=======
-class OpportunityDetailAPIView(generics.RetrieveUpdateAPIView):
-    queryset = Opportunity.objects.all()
-    serializer_class = OpportunitySerializer
-    # Uncomment the line below to restrict access to admin users only
-    # permission_classes = (IsAdminUser,)
->>>>>>> ebcf565080fc7cd921aa134b69187bf116a17d51
+
+def get_todays_sales():
+    today = date.today()
+    opportunities = Opportunity.objects.filter(stage='closed won', closedOn=today)
+    total_sales = sum(opportunity.amount for opportunity in opportunities)
+    report_data = {'total_sales': total_sales, 'opportunities': list(opportunities.values())}
+    return report_data
+
+def get_sales_by_lead_source():
+    opportunities = Opportunity.objects.filter(stage='closed won')
+    sales_by_source = opportunities.values('lead_source').annotate(total_sales=Sum('amount'))
+    sales_data = list(sales_by_source)
+    report_data = {'total_sales_by_lead_source': sales_data}
+    return report_data
+
+def get_sales_this_month():
+    today = date.today()
+    start_of_month = today.replace(day=1)    
+    opportunities = Opportunity.objects.filter(
+        stage='CLOSED WON',
+        closedOn__gte=start_of_month,
+        closedOn__lte=today
+    ) 
+    total_sales = opportunities.aggregate(total_sales=Sum('amount'))['total_sales'] or 0
+    report_data = {'total_sales_this_month': total_sales}
+    return report_data
+
+# def deal_lost():
+#     Opportunities = Opportunity.objects.filter(stage='CLOSED LOST')
+#     lead_lost= {'total lost lead':Opportunities.count(),'lead_lost':list(Opportunities.values())}
+#     report_data = lead_lost
+#     return report_data
+
+def get_vendors_owner():
+    vender = Vendors.objects.all()
+    owner_data = {'total_owner':vender.count(),'vendor_owner':list(vender.values('vendor_owner'))}
+    report_data = owner_data
+    return report_data
+
+
+
+
+

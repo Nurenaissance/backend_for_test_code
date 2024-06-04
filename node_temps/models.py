@@ -7,7 +7,7 @@ class NodeTemplate(models.Model):
     description = models.TextField(blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=100)
-    createdBy = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='node_temp_createdby', on_delete=models.CASCADE)
+    createdBy = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='node_temp_createdby', on_delete=models.CASCADE,null=True)
     node_data = models.JSONField()
 
     def __str__(self):

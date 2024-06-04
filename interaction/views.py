@@ -71,7 +71,6 @@ class InteractionListAPIView(APIView):
             return Response({'error': f"ContentType matching query does not exist for entity type: {entity_type}"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': f'An error occurred while processing the request: {e}'}, status=status.HTTP_400_BAD_REQUEST)
-<<<<<<< HEAD
         
 
 
@@ -116,8 +115,6 @@ def extract_cltv(request, entity_type_id):
     except Exception as e:
         # Handle exceptions
         return JsonResponse({'error': str(e)}, status=500)
-=======
-
 class InteractionDetailAPIView(APIView):
     serializer_class = InteractionSerializer
 
@@ -125,4 +122,3 @@ class InteractionDetailAPIView(APIView):
         interaction = get_object_or_404(Interaction, pk=pk)
         serializer = self.serializer_class(interaction)
         return Response(serializer.data, status=status.HTTP_200_OK)
->>>>>>> ebcf565080fc7cd921aa134b69187bf116a17d51
