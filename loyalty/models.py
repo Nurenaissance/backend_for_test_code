@@ -20,8 +20,7 @@ class Loyalty(models.Model):
     ('EUR', 'Euro'),
     ('GBP', 'British Pound'),
     ('JPY', 'Japanese Yen'),
-    ('INR', 'Indian Rupee')
-    # Add more currencies as needed
+    ('INR', 'Indian Rupee'),
 )
 
     entity_id = models.PositiveIntegerField()
@@ -35,7 +34,8 @@ class Loyalty(models.Model):
     start_date = models.DateField(),
     end_date = models.DateField(),
     company = models.CharField(max_length=50),
-    
+    website = models.URLField(blank=True, null=True)
+
     
     def __str__(self):
         return f'{self.loyalty_program} with {self.entity}'
