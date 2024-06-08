@@ -46,8 +46,8 @@ from interaction.active_account import get_lead_summation
 from vendors import views as vendview
 from product import views as prodview
 from documents import views as docview
-from simplecrm.views import AddEntityToModelView
-from dynamic_entities.views import CreateDynamicModelView,DynamicModelListView,DynamicModelDataView,DeleteDynamicModelView
+from dynamic_entities import views as dyv
+
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
@@ -96,9 +96,9 @@ urlpatterns = [
     path('documents/<int:pk>', docview.DocumentDetailAPIView.as_view(), name='vendor-detail'),
     path('return-documents/<int:entity_type>/<int:entity_id>/', docview.RetrieveDocumentsView.as_view(), name='retrieve-documents'),
     path('return-documents/<int:entity_type>/', docview.RetrieveDocumentsView.as_view(), name='retrieve-documents'),    
-    path('create-dynamic-model/', CreateDynamicModelView.as_view(), name='create_dynamic_model'),
-    path('dynamic-models/', DynamicModelListView.as_view(), name='dynamic_model_list'),
-    path('dynamic-model-data/<str:model_name>/', DynamicModelDataView.as_view(), name='dynamic_model_data'),
-    path('delete-dynamic-model/<str:model_name>/', DeleteDynamicModelView.as_view(), name='delete_dynamic_model'),
-    path('models/entities/add/', AddEntityToModelView.as_view(), name='add-entity-to-model'),
+    path('create-dynamic-model/', dyv.CreateDynamicModelView.as_view(), name='create_dynamic_model'),
+    path('dynamic-models/', dyv.DynamicModelListView.as_view(), name='dynamic_model_list'),
+    path('dynamic-model-data/<str:model_name>/', dyv.DynamicModelDataView.as_view(), name='dynamic_model_data'),
+    path('delete-dynamic-model/<str:model_name>/', dyv.DeleteDynamicModelView.as_view(), name='delete_dynamic_model'),
+    
 ]
