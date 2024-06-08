@@ -46,6 +46,9 @@ from interaction.active_account import get_lead_summation
 from vendors import views as vendview
 from product import views as prodview
 from documents import views as docview
+from simplecrm.views import AddEntityToModelView
+from dynamic_entities.views import CreateDynamicModelView,DynamicModelListView,DynamicModelDataView,DeleteDynamicModelView
+
 urlpatterns = [
     #path('admin/', admin.site.urls),
     path('register/', Reg.register, name='register'),  # Endpoint for user registration
@@ -69,6 +72,7 @@ urlpatterns = [
     path('tasks/', tviews.TaskListCreateAPIView.as_view(), name='task-list'),
     path('tasks/<int:pk>/', tviews.TaskRetrieveUpdateDestroyAPIView.as_view(), name='task-detail'), 
     path('reminders/', rviews.ReminderListAPIView.as_view(), name='reminder-list'),
+    path('reminder/<int:pk>/', rviews.ReminderDetailAPIView.as_view(), name='reminder-detail'), 
     path('uploadexcel/', ingex.ImportLeadData, name='excel'),
     path('excel-column/', getxcol.get_excel_columns, name='column_excel'),
     path('get-user/<str:username>/', getuser.get_user_by_username, name='get_user'),
@@ -79,7 +83,7 @@ urlpatterns = [
     path(r'node-templates/', nviews.NodeTemplateListCreateAPIView.as_view(), name='node-template-list-create'),
     path('node-templates/<int:pk>/', nviews.NodeTemplateDetailAPIView.as_view(), name='node-template-detail'),
     path('extract_cltv/<int:entity_type_id>/', extract_cltv, name='extract_cltv'),
-    path ('r/<str:report_id>/', get_report_by_id, name='get_report_by_id'),
+    path ('report/<str:report_id>/', get_report_by_id, name='get_report_by_id'),
     path('recent_request/<str:model_name>/',rr.recent_request, name='recent_request'),
     path("active_accounts/",get_most_active_accounts, name="most-active-entites"),
     path("active_contacts/",get_most_active_contacts, name="most-active-entites"),
@@ -90,7 +94,11 @@ urlpatterns = [
     path('vendor/<int:pk>', vendview.VendorDetailAPIView.as_view(), name='vendor-detail'),
     path('documents/', docview.DocumentListAPIView.as_view(), name='vendors-list'),
     path('documents/<int:pk>', docview.DocumentDetailAPIView.as_view(), name='vendor-detail'),
-
-   
-
+    path('return-documents/<int:entity_type>/<int:entity_id>/', docview.RetrieveDocumentsView.as_view(), name='retrieve-documents'),
+    path('return-documents/<int:entity_type>/', docview.RetrieveDocumentsView.as_view(), name='retrieve-documents'),    
+    path('create-dynamic-model/', CreateDynamicModelView.as_view(), name='create_dynamic_model'),
+    path('dynamic-models/', DynamicModelListView.as_view(), name='dynamic_model_list'),
+    path('dynamic-model-data/<str:model_name>/', DynamicModelDataView.as_view(), name='dynamic_model_data'),
+    path('delete-dynamic-model/<str:model_name>/', DeleteDynamicModelView.as_view(), name='delete_dynamic_model'),
+    path('models/entities/add/', AddEntityToModelView.as_view(), name='add-entity-to-model'),
 ]
