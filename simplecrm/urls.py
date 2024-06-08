@@ -32,13 +32,11 @@ from simplecrm import get_column_name as getxcol
 from simplecrm import get_user as getuser
 from tenant import views as tenview
 from campaign import views as campview
-
 from simplecrm.recent_request import recent_request
 from interaction.active_account import get_most_active_accounts
 from node_temps import views as nviews
 from interaction.views import extract_cltv
 from opportunities.views import get_report_by_id
-
 from simplecrm import recent_request as rr
 from interaction.active_account import get_most_active_accounts
 from interaction.active_account import get_most_active_contacts
