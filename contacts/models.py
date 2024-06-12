@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from accounts.models import Account
 from django.conf import settings
 from tenant.models import Tenant 
+# from custom_fields.models import CustomField
 class Contact(models.Model):
     first_name = models.CharField("First name", max_length=255)
     last_name = models.CharField("Last name", max_length=255)
@@ -15,6 +16,7 @@ class Contact(models.Model):
     createdOn = models.DateTimeField("Created on", auto_now_add=True)
     isActive = models.BooleanField(default=False)
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
+    # custom_fields = models.ForeignKey(CustomField, on_delete=models.CASCADE, null=True, blank=True, related_name='contact_custom_fields')
 
     def __str__(self):
         return self.first_name

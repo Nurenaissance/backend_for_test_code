@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from accounts.models import Account
 from django.conf import settings
+# from custom_fields.models import CustomField
 from tenant.models import Tenant 
 LEAD_SOURCE = (
     ('call', 'Call'),
@@ -37,7 +38,7 @@ class Lead(models.Model):
     address = models.CharField("Address", max_length=255, blank=True, null=True)
     website = models.CharField("Website", max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    assigned_to = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='lead_assigned_users')    
+    assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='lead_assigned_users', blank=True, null=True, on_delete=models.CASCADE)    
     account_name = models.CharField(max_length=255, null=True, blank=True)
     opportunity_amount = models.DecimalField("Opportunity Amount", decimal_places=2, max_digits=12,blank=True, null=True)
     createdBy = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='lead_created_by', on_delete=models.CASCADE)
@@ -47,5 +48,6 @@ class Lead(models.Model):
     money = models.DecimalField("Money", decimal_places=2, max_digits=12, blank=True, null=True)
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
     priority = models.CharField("Lead Priority", max_length=6, blank= True, null= True, choices=PRIORITY_CHOICES )
+    # custom_fields = models.ForeignKey(CustomField, on_delete=models.CASCADE, null=True, blank=True, related_name='lead_custom_fields')
     def __str__(self):
         return self.first_name + self.last_name

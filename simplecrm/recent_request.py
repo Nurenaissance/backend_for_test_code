@@ -4,6 +4,8 @@ from leads.models import Lead
 from contacts.models import * 
 from opportunities.models import * 
 from django.core.exceptions import FieldError
+from django.forms.models import model_to_dict
+
 
 def recent_request(request, model_name):
     try:
@@ -20,9 +22,6 @@ def recent_request(request, model_name):
             return JsonResponse({'message': 'Invalid model name.'}, status=400)
         
         vals = model_class.objects.all().order_by('createdOn')
-
-        vals = model_class.objects.all().order_by('createdOn')
-
         created_on_date = request.GET.get('createdOn')
         if created_on_date:
             try:
@@ -30,14 +29,9 @@ def recent_request(request, model_name):
             except FieldError:
                 return JsonResponse({'message': 'createdOn field not found in the model.'}, status=400)
 
-        data = [
-            {
-                'id': val.id,
-                'createdOn': val.createdOn,
-            }
-            for val in vals
-        ]
-
+    
+        data = [model_to_dict(val) for val in vals]
+       
         return JsonResponse(data, safe=False)
     except Exception as e:
         print("Error:", e)
