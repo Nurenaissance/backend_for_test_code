@@ -7,7 +7,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey 
 
 class Document(models.Model):
-    # Information about the document
     name = models.CharField('Document Name', max_length=255)
     document_type = models.CharField('Document Type', max_length=100)
     description = models.TextField('Description', blank=True)

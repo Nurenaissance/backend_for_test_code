@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'product',
     'documents',
     'dynamic_entities',
+    'loyalty',
+    'custom_fields',
 
 ]
 

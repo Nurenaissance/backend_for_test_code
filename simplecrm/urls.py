@@ -45,6 +45,10 @@ from vendors import views as vendview
 from product import views as prodview
 from documents import views as docview
 from dynamic_entities import views as dyv
+# from loyalty import views as lv
+from simplecrm import views as simviews
+from custom_fields import views as cfviews
+
 
 
 urlpatterns = [
@@ -61,6 +65,7 @@ urlpatterns = [
     path('opportunities/<int:pk>/', oviews.OpportunityDetailAPIView.as_view(), name='opportunity-detail'),
     path('contacts/', cviews.ContactListCreateAPIView.as_view(), name='contact-list-create'),
     path('contacts/<int:pk>/', cviews.ContactDetailAPIView.as_view(), name='contact-detail'),
+    path('contacts/', cviews.ContactDetailAPIView.as_view(), name='contact-detail'),
     path('meetings/', mviews.MeetingListCreateAPIView.as_view(), name='meeting-list-create'),
     path('meetings/<int:pk>/', mviews.MeetingDetailAPIView.as_view(), name='meeting-detail'),
     path('calls/', caviews.callsListAPIView.as_view(), name='calls'), 
@@ -98,5 +103,10 @@ urlpatterns = [
     path('dynamic-models/', dyv.DynamicModelListView.as_view(), name='dynamic_model_list'),
     path('dynamic-model-data/<str:model_name>/', dyv.DynamicModelDataView.as_view(), name='dynamic_model_data'),
     path('delete-dynamic-model/<str:model_name>/', dyv.DeleteDynamicModelView.as_view(), name='delete_dynamic_model'),
-    
+    path('return-interaction/<int:entity_type>/<int:entity_id>/', inviews.RetrieveInteractionsView.as_view(), name='retrieve-interaction'),
+    path('return-interaction/<int:entity_type>/', inviews.RetrieveInteractionsView.as_view(), name='retrieve-interaction'),    
+    path('deduplicate/', simviews.deduplicate_view, name='deduplicate'),
+    path('create-custom-field/', cfviews.create_custom_field, name='create_custom_field'),
+    path('user/<int:user_id>/tasks/', tviews.UserTasksListAPIView.as_view(), name='user-tasks-list'),
 ]
+
