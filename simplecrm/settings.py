@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'dynamic_entities',
     'loyalty',
     'custom_fields',
+    'tickets',
 
 ]
 

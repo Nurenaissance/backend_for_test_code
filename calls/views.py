@@ -8,7 +8,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 class callsListAPIView(generics.ListCreateAPIView):
     queryset = calls.objects.all()  # Using call model queryset instead of Lead
     serializer_class = callsSerializer  # Using callSerializer instead of LeadSerializer
-    # permission_classes = (IsAdminUser,)  # Optionally, uncomment and modify the permission classes
+    # permission_classes = (IsAdminUser,) 
 
     def create(self, request, *args, **kwargs):
         try:

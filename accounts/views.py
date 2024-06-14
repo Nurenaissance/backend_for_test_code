@@ -7,48 +7,46 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import AccountSerializer,CustomFieldSerializer
 from custom_fields.models import CustomField
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from custom_fields.views import retrieve_custom_fields
 
 class AccountListCreateAPIView(ListCreateAPIView):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
     permission_classes = (AllowAny,)
    
+# @permission_classes([AllowAny])
 
 class AccountDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
-    permission_classes = (AllowAny,)  # Allowing any user to access this view
+    permission_classes = (AllowAny,)  
+    
+    def get(self, request, pk):
+        account = Account.objects.get(pk=pk)
+        serializer = AccountSerializer(account)
+
+        # Access custom fields associated with the account
+        custom_fields_data = []
+        for custom_field in account.custom_fields.all():
+            custom_fields_data.append({
+                'custom_field': custom_field.custom_field,
+                'value': custom_field.value,
+                'field_type': custom_field.field_type
+            })
+
+        # Include custom fields in the response data
+        data = {
+            'account': serializer.data,
+            'custom_fields': custom_fields_data
+        }
+
+        return Response(data)
 
 
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def get_account_with_custom_fields(request, model_name):
-    accounts = Account.objects.all()  # Fetch all accounts
-
-    if not model_name:
-        return Response({'error': 'model_name is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-    custom_fields = CustomField.objects.filter(model_name=model_name, custom_field=accounts)
-    serializer = CustomFieldSerializer(custom_fields, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 
 
-
-
-
-
-
-
-
-
-     # def get_queryset(self):
-    #     # Filter queryset based on user's tenant
-    #     user_tenant = self.request.user.tenant
-    #     return Account.objects.filter(tenant=user_tenant)
-
-    # def perform_create(self, serializer):
-    #     # Set the tenant of the account before saving
-    #     serializer.save(tenant=self.request.user.tenant)
 

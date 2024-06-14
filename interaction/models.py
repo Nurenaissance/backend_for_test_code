@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from tenant.models import Tenant 
+from custom_fields.models import CustomField
 class Interaction(models.Model):
     INTERACTION_TYPES = (
         ('Call', 'Call'),
@@ -19,6 +20,7 @@ class Interaction(models.Model):
     interaction_datetime = models.DateTimeField()
     notes = models.TextField(blank=True, null=True)
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
+    custom_fields = models.ManyToManyField(CustomField, blank=True, related_name='interaction_custom_fields')
     def __str__(self):
         return f'{self.interaction_type} with {self.entity}'
    

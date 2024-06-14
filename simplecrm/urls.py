@@ -108,6 +108,6 @@ urlpatterns = [
     path('deduplicate/', simviews.deduplicate_view, name='deduplicate'),
     path('create-custom-field/', cfviews.create_custom_field, name='create_custom_field'),
     path('user/<int:user_id>/tasks/', tviews.UserTasksListAPIView.as_view(), name='user-tasks-list'),
-    path('custom-field/<str:model_name>/',aviews.get_account_with_custom_fields,name='custom-field'),
+    path('<str:model_name>/<int:entity_id>/custom-fields/', cfviews.retrieve_custom_fields, name='custom_fields'),
 ]
 

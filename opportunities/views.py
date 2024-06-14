@@ -43,6 +43,8 @@ def rfm_analysis(request):
     return JsonResponse(rfm_data, safe=False)
 
 
+
+
 CustomUser = get_user_model()
 
 def get_report_by_id(request, report_id):
